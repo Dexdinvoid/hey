@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toggleLike, addComment } from "@/app/actions/feed";
 
-type Post = {
+export type Post = {
   id: string;
   imageUrl: string;
   caption: string | null;
@@ -90,9 +90,8 @@ export function FeedPostCard({
         <button
           type="button"
           onClick={handleLike}
-          className={`text-sm font-medium transition-colors ${
-            liked ? "text-purple-400" : "text-white/50 hover:text-white"
-          }`}
+          className={`text-sm font-medium transition-colors ${liked ? "text-purple-400" : "text-white/50 hover:text-white"
+            }`}
         >
           {liked ? "Liked" : "Like"} · {post._count.likes}
         </button>
