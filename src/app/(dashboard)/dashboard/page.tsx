@@ -12,9 +12,16 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
   if (!authUser) redirect("/login");
 
-  const dbUser = await prisma.user.findUnique({
+  // Ensure user is synced
+  let dbUser = await prisma.user.findUnique({
     where: { id: authUser.id },
   });
+
+  if (!dbUser) {
+    const { syncUser } = await import("@/lib/auth-helpers");
+    dbUser = await syncUser(authUser);
+  }
+
   if (!dbUser) redirect("/login");
 
   const recentPosts = await prisma.post.findMany({
@@ -92,3 +99,4 @@ export default async function DashboardPage() {
     </div>
   );
 }
+
