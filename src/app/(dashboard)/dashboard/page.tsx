@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
-import { FeedPostCard, type Post } from "./feed-post-card";
+import { FeedPostCard } from "./feed-post-card";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
