@@ -1,36 +1,38 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/db";
+import { Navbar } from "@/components/navbar";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
-
-export const metadata: Metadata = {
-  title: "Consistency – Habit tracking, gamified",
-  description:
-    "Prove habits with photos, earn points, climb leagues, compete with friends.",
-};
-
-export default function RootLayout({
+export default async function DashboardLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const supabase = await createClient();
+  const {
+    data: { user: authUser },
+  } = await supabase.auth.getUser();
+
+  if (!authUser) {
+    redirect("/login");
+  }
+
+  // Ensure user is synced
+  let dbUser = await prisma.user.findUnique({
+    where: { id: authUser.id },
+  });
+
+  if (!dbUser) {
+    const { syncUser } = await import("@/lib/auth-helpers");
+    dbUser = await syncUser(authUser);
+  }
+
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/10 to-slate-900">
+      <Navbar user={dbUser} />
+      <main className="container mx-auto px-4 py-6 max-w-4xl">
         {children}
-      </body>
-    </html>
+      </main>
+    </div>
   );
 }
