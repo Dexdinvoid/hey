@@ -1,0 +1,194 @@
+.container {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.statsSummary {
+  display: flex;
+  gap: 2rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(251, 146, 60);
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dayDetailCard {
+  flex: 1;
+  min-width: 250px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.activeDetailContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detailDate {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.detailStats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detailCount {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.detailMessage {
+  font-size: 0.75rem;
+  color: rgb(251, 146, 60);
+  font-weight: 500;
+}
+
+.emptyDetailContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.875rem;
+}
+
+.hintIcon {
+  font-size: 1.25rem;
+}
+
+.heatmapWrapper {
+  position: relative;
+}
+
+.monthLabels {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 0.5rem;
+  padding-left: 48px;
+}
+
+.monthLabel {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.gridContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dayLabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 40px;
+  padding-top: 2px;
+}
+
+.dayLabel {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1;
+}
+
+.grid {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+  overflow-x: auto;
+}
+
+.week {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.cell:hover {
+  transform: scale(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.empty {
+  background: rgba(255, 255, 255, 0.02);
+  cursor: default;
+}
+
+.empty:hover {
+  transform: none;
+  border: none;
+}
+
+.level0 {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.level1 {
+  background: rgb(14, 68, 41);
+}
+
+.level2 {
+  background: rgb(0, 109, 50);
+}
+
+.level3 {
+  background: rgb(38, 166, 65);
+}
+
+.level4 {
+  background: rgb(57, 211, 83);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.legendLabel {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
