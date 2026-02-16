@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
-import { FeedPostCard } from "./feed-post-card";
+import { FeedPostCard, type Post } from "./feed-post-card";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -79,7 +79,7 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <ul className="space-y-4">
-            {recentPosts.map((post: any) => (
+            {recentPosts.map((post) => (
               <FeedPostCard
                 key={post.id}
                 post={post}
