@@ -24,7 +24,7 @@ function getLevel(count: number, maxCount: number): 0 | 1 | 2 | 3 | 4 {
 
 export default function EnhancedHeatmap({ completions, year: providedYear }: EnhancedHeatmapProps) {
   const year = providedYear || new Date().getFullYear();
-  
+
   const [hoveredDay, setHoveredDay] = React.useState<{ date: string; count: number; level: number } | null>(null);
 
   // Generate calendar data
@@ -44,7 +44,7 @@ export default function EnhancedHeatmap({ completions, year: providedYear }: Enh
       currentDate.setDate(1 + i);
       const dateString = toDateKey(currentDate);
       const count = byDate.get(dateString) || 0;
-      
+
       days.push({
         date: dateString,
         count,
@@ -96,7 +96,7 @@ export default function EnhancedHeatmap({ completions, year: providedYear }: Enh
       const firstDayOfWeek = week.find(d => d.date !== '');
       if (!firstDayOfWeek) return;
 
-      const [y, m, d] = firstDayOfWeek.date.split('-').map(Number);
+      const [, m] = firstDayOfWeek.date.split('-').map(Number);
       const month = m - 1;
 
       const prevWeek = weekIndex > 0 ? weeks[weekIndex - 1] : null;
@@ -105,7 +105,7 @@ export default function EnhancedHeatmap({ completions, year: providedYear }: Enh
       if (!prevDayStr) {
         labels.push({ month: MONTHS[month], index: weekIndex });
       } else {
-        const [py, pm, pd] = prevDayStr.split('-').map(Number);
+        const [, pm] = prevDayStr.split('-').map(Number);
         if (pm - 1 !== month) {
           labels.push({ month: MONTHS[month], index: weekIndex });
         }
@@ -142,10 +142,10 @@ export default function EnhancedHeatmap({ completions, year: providedYear }: Enh
                 {(() => {
                   const [y, m, d] = hoveredDay.date.split('-').map(Number);
                   const date = new Date(y, m - 1, d);
-                  return date.toLocaleDateString(undefined, { 
-                    weekday: 'long', 
-                    month: 'long', 
-                    day: 'numeric' 
+                  return date.toLocaleDateString(undefined, {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric'
                   });
                 })()}
               </div>
