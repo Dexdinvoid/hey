@@ -46,7 +46,7 @@ export default async function ChallengesPage() {
       f.user1Id === authUser.id ? [f.user2Id] : [f.user1Id]
     )
   );
-  const friendsTop = globalTop.filter((u) => friendIdSet.has(u.id));
+  const friendsTop = globalTop.filter((u: { id: string }) => friendIdSet.has(u.id));
 
   return (
     <div className="space-y-8">
