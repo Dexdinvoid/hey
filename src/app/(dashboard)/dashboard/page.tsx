@@ -79,7 +79,7 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <ul className="space-y-4">
-            {recentPosts.map((post) => (
+            {recentPosts.map((post: any) => (
               <FeedPostCard
                 key={post.id}
                 post={post}
