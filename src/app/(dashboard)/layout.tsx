@@ -17,30 +17,14 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  // Ensure user is synced
   let dbUser = await prisma.user.findUnique({
     where: { id: authUser.id },
   });
 
   if (!dbUser) {
-    const username =
-      authUser.user_metadata?.username ||
-      authUser.email?.split("@")[0]?.replace(/[^a-z0-9_]/gi, "") ||
-      "user";
-    const base = username.slice(0, 20).toLowerCase();
-    let finalUsername = base;
-    let n = 0;
-    while (await prisma.user.findUnique({ where: { username: finalUsername } })) {
-      finalUsername = `${base}${++n}`;
-    }
-    dbUser = await prisma.user.create({
-      data: {
-        id: authUser.id,
-        email: authUser.email!,
-        username: finalUsername,
-        displayName: authUser.user_metadata?.full_name || finalUsername,
-        avatarUrl: authUser.user_metadata?.avatar_url,
-      },
-    });
+    const { syncUser } = await import("@/lib/auth-helpers");
+    dbUser = await syncUser(authUser);
   }
 
   return (
