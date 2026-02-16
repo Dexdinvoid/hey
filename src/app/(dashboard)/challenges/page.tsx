@@ -42,7 +42,7 @@ export default async function ChallengesPage() {
   ]);
 
   const friendIdSet = new Set(
-    friendIds.flatMap((f) =>
+    friendIds.flatMap((f: { user1Id: string; user2Id: string }) =>
       f.user1Id === authUser.id ? [f.user2Id] : [f.user1Id]
     )
   );
