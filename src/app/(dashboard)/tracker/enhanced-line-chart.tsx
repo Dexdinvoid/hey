@@ -101,15 +101,15 @@ export default function EnhancedLineChart({ completions }: EnhancedLineChartProp
                 </div>
             </div>
 
-            <div className={styles.chartWrapper} style={{ height: 250, width: '100%' }}>
+            <div className={styles.chartWrapper}>
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                         data={data}
                         margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                     >
                         <defs>
-                            <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="rgb(251, 146, 60)" stopOpacity={0.4} />
+                            <linearGradient id="colorRate" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="rgb(251, 146, 60)" stopOpacity={0.3} />
                                 <stop offset="95%" stopColor="rgb(251, 146, 60)" stopOpacity={0} />
                             </linearGradient>
                         </defs>
@@ -117,6 +117,7 @@ export default function EnhancedLineChart({ completions }: EnhancedLineChartProp
                             vertical={false}
                             stroke="rgba(255, 255, 255, 0.1)"
                             strokeDasharray="3 3"
+                            opacity={0.3}
                         />
                         <XAxis
                             dataKey="date"
@@ -124,47 +125,42 @@ export default function EnhancedLineChart({ completions }: EnhancedLineChartProp
                             tickLine={false}
                             tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 12 }}
                             dy={10}
-                            interval={getInterval()}
+                            interval={selectedPeriod === 'year' || (typeof selectedPeriod === 'number' && selectedPeriod > 90) ? 30 : (typeof selectedPeriod === 'number' && selectedPeriod > 30) ? 6 : (typeof selectedPeriod === 'number' && selectedPeriod > 14) ? 2 : 0}
                         />
                         <YAxis
-                            hide={false}
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 12 }}
-                            domain={[0, maxCount + 1]}
+                            hide={true}
+                            domain={[0, 'auto']}
                         />
                         <Tooltip
+                            isAnimationActive={false}
+                            cursor={{ stroke: 'rgba(255, 255, 255, 0.6)', strokeWidth: 1, strokeDasharray: '5 5' }}
                             contentStyle={{
                                 backgroundColor: 'rgba(30, 30, 40, 0.95)',
                                 border: '1px solid rgba(255, 255, 255, 0.2)',
                                 borderRadius: '8px',
-                                boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+                                boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
                             }}
                             itemStyle={{ color: 'rgba(255, 255, 255, 0.9)' }}
                             labelStyle={{ color: 'rgba(255, 255, 255, 0.7)', marginBottom: '4px' }}
-                            formatter={(value: number | undefined) => [`${value ?? 0} completions`, '']}
+                            formatter={(value: number | undefined) => [value ? `${value}` : '0', 'Completions']}
                         />
                         <Area
-                            type="linear"
+                            type="monotone"
                             dataKey="count"
                             stroke="rgb(251, 146, 60)"
                             strokeWidth={3}
                             fillOpacity={1}
-                            fill="url(#colorGradient)"
+                            fill="url(#colorRate)"
                             animationDuration={1000}
                             activeDot={{
                                 r: 6,
                                 strokeWidth: 0,
-                                fill: 'rgb(251, 146, 60)',
+                                fill: 'white',
                             }}
                         />
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
-
-            <p className={styles.caption}>
-                Completions per day · {selectedPeriod === 'year' ? 'Full year' : `Last ${selectedPeriod} days`}
-            </p>
         </div>
     );
 }
