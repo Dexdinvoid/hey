@@ -4,8 +4,8 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { AddHabitForm } from "./add-habit-form";
 import { HabitList } from "./habit-list";
-import EnhancedHeatmap from "./enhanced-heatmap";
-import EnhancedLineChart from "./enhanced-line-chart";
+import { Heatmap } from "./heatmap";
+import { ActivityLineChart } from "./activity-line-chart";
 
 export default async function TrackerPage() {
   const supabase = await createClient();
@@ -45,8 +45,8 @@ export default async function TrackerPage() {
 
       <section className="space-y-6">
         <h2 className="text-lg font-medium text-white">Activity</h2>
-        <EnhancedLineChart completions={allCompletions} />
-        <EnhancedHeatmap completions={allCompletions} />
+        <ActivityLineChart completions={allCompletions} />
+        <Heatmap completions={allCompletions} />
       </section>
 
       <section className="glass rounded-2xl p-6 border border-white/10">
