@@ -66,18 +66,30 @@ export async function generateChallenge(type: "daily" | "weekly" | "monthly") {
     } catch {
       // If direct parsing fails, try to extract JSON from the content
       // NVIDIA's reasoning_content may contain both reasoning and JSON
-      const jsonMatch = content.match(/\{[^{}]*"title"[^{}]*"description"[^{}]*\}/);
+      // Try multiple extraction strategies
+      let jsonMatch = content.match(/\{[\s\S]*?"title"[\s\S]*?"description"[\s\S]*?\}/);
+
       if (!jsonMatch) {
-        return { error: "Invalid AI response - no JSON found" };
+        // Try to find any JSON object in the response
+        jsonMatch = content.match(/\{[\s\S]*?\}/);
       }
+
+      if (!jsonMatch) {
+        // Log the actual content for debugging
+        console.error("AI response content:", content);
+        return { error: "Invalid AI response - no JSON found. Check logs." };
+      }
+
       try {
         parsed = JSON.parse(jsonMatch[0]) as { title: string; description: string };
-      } catch {
+      } catch (parseError) {
+        console.error("JSON parse error:", parseError, "Content:", jsonMatch[0]);
         return { error: "Invalid AI response - malformed JSON" };
       }
     }
 
     if (!parsed.title || !parsed.description) {
+      console.error("Missing fields in parsed response:", parsed);
       return { error: "Invalid AI response - missing title or description" };
     }
 
