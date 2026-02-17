@@ -73,16 +73,6 @@ export default function EnhancedLineChart({ completions }: EnhancedLineChartProp
         return chartData;
     }, [completions, selectedPeriod]);
 
-    const maxCount = Math.max(1, ...data.map(d => d.count));
-
-    // Determine X-axis interval based on period
-    const getInterval = () => {
-        if (selectedPeriod === 'year') return 30;
-        if (selectedPeriod >= 90) return 6;
-        if (selectedPeriod >= 30) return 2;
-        return 0;
-    };
-
     return (
         <div className={styles.chartContainer}>
             <div className={styles.header}>
