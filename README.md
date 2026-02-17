@@ -16,7 +16,7 @@ Habit tracking, gamified. Prove tasks with image proof, earn points, climb leagu
    - `DATABASE_URL` – PostgreSQL connection string (Neon or Supabase)
    - `NEXT_PUBLIC_SUPABASE_URL` – Supabase project URL
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` – Supabase anon key  
-- `OPENAI_API_KEY` – (optional) For AI-generated challenges
+   - `NVIDIA_API_KEY` – (optional) For AI-generated challenges using NVIDIA's Nemotron model
 
 2. Create the database and run migrations:
    ```bash

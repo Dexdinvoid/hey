@@ -14,40 +14,71 @@ export async function generateChallenge(type: "daily" | "weekly" | "monthly") {
   } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.NVIDIA_API_KEY;
+  const baseURL = process.env.NVIDIA_BASE_URL || "https://integrate.api.nvidia.com/v1";
+  const model = process.env.NVIDIA_MODEL || "nvidia/nemotron-3-nano-30b-a3b";
+
   if (!apiKey) {
-    return { error: "AI challenges are not configured (OPENAI_API_KEY missing)" };
+    return { error: "AI challenges are not configured (NVIDIA_API_KEY missing)" };
   }
 
   const prompt = `Generate one habit challenge for a gamified habit tracker app. Type: ${type}. Return only a JSON object with exactly: {"title": "short title", "description": "one sentence description of the challenge"}. No markdown, no code block.`;
 
   try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Use fetch to maintain compatibility without installing openai package
+    const res = await fetch(`${baseURL}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model,
         messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
         max_tokens: 150,
       }),
     });
+
     if (!res.ok) {
-      return { error: `OpenAI error: ${res.status}` };
+      return { error: `NVIDIA API error: ${res.status}` };
     }
+
     const data = (await res.json()) as {
-      choices?: { message?: { content?: string } }[];
+      choices?: {
+        message?: {
+          content?: string;
+          reasoning_content?: string;
+        }
+      }[];
     };
-    const content = data.choices?.[0]?.message?.content?.trim();
+
+    // NVIDIA API returns content in reasoning_content field
+    const content = data.choices?.[0]?.message?.reasoning_content?.trim()
+      || data.choices?.[0]?.message?.content?.trim();
+
     if (!content) return { error: "No response from AI" };
 
     let parsed: { title: string; description: string };
     try {
+      // Try to parse directly first
       parsed = JSON.parse(content) as { title: string; description: string };
     } catch {
-      return { error: "Invalid AI response" };
+      // If direct parsing fails, try to extract JSON from the content
+      // NVIDIA's reasoning_content may contain both reasoning and JSON
+      const jsonMatch = content.match(/\{[^{}]*"title"[^{}]*"description"[^{}]*\}/);
+      if (!jsonMatch) {
+        return { error: "Invalid AI response - no JSON found" };
+      }
+      try {
+        parsed = JSON.parse(jsonMatch[0]) as { title: string; description: string };
+      } catch {
+        return { error: "Invalid AI response - malformed JSON" };
+      }
+    }
+
+    if (!parsed.title || !parsed.description) {
+      return { error: "Invalid AI response - missing title or description" };
     }
 
     const challenge = await prisma.challenge.create({
