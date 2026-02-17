@@ -101,7 +101,7 @@ export default function EnhancedLineChart({ completions }: EnhancedLineChartProp
                 </div>
             </div>
 
-            <div className={styles.chartWrapper}>
+            <div className={styles.chartWrapper} style={{ height: 250, width: '100%' }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                         data={data}
@@ -145,7 +145,7 @@ export default function EnhancedLineChart({ completions }: EnhancedLineChartProp
                             formatter={(value: number | undefined) => [`${value ?? 0} completions`, '']}
                         />
                         <Area
-                            type="monotone"
+                            type="linear"
                             dataKey="count"
                             stroke="rgb(251, 146, 60)"
                             strokeWidth={3}
