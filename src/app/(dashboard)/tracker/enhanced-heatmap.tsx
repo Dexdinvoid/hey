@@ -23,7 +23,7 @@ function getLevel(count: number, maxCount: number): 0 | 1 | 2 | 3 | 4 {
 }
 
 export default function EnhancedHeatmap({ completions, year: providedYear }: EnhancedHeatmapProps) {
-  const year = providedYear || new Date().getFullYear();
+  const [year] = React.useState<number>(() => providedYear ?? new Date().getFullYear());
 
   const [hoveredDay, setHoveredDay] = React.useState<{ date: string; count: number; level: number } | null>(null);
 
@@ -142,7 +142,7 @@ export default function EnhancedHeatmap({ completions, year: providedYear }: Enh
                 {(() => {
                   const [y, m, d] = hoveredDay.date.split('-').map(Number);
                   const date = new Date(y, m - 1, d);
-                  return date.toLocaleDateString(undefined, {
+                  return date.toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'long',
                     day: 'numeric'

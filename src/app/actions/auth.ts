@@ -6,10 +6,35 @@ import { prisma } from "@/lib/db";
 
 function authErrorMessage(raw: string): string {
   const lower = raw.toLowerCase();
-  if (lower.includes("rate limit") || lower.includes("rate_limit") || lower.includes("email rate limit")) {
-    return "Email rate limit exceeded. For local dev: Supabase Dashboard → Authentication → Providers → Email → turn OFF \"Confirm email\". For production: use Custom SMTP in Auth settings.";
+  if (
+    lower.includes("rate limit") ||
+    lower.includes("rate_limit") ||
+    lower.includes("email rate limit")
+  ) {
+    return 'Email rate limit exceeded. For local dev: Supabase Dashboard → Authentication → Providers → Email → turn OFF "Confirm email". For production: use Custom SMTP in Auth settings.';
   }
   return raw;
+}
+
+export async function signInWithOAuth(provider: "google" | "github") {
+  const supabase = await createClient();
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${siteUrl}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    redirect(`/login?error=${encodeURIComponent(error.message)}`);
+  }
+
+  if (data.url) {
+    redirect(data.url);
+  }
 }
 
 export async function signInWithEmail(formData: FormData) {
@@ -54,8 +79,14 @@ export async function signUpWithEmail(formData: FormData) {
       }
       suffix++;
     }
-    await prisma.user.create({
-      data: {
+    await prisma.user.upsert({
+      where: { email: data.user.email! },
+      update: {
+        id: data.user.id,
+        username: finalUsername,
+        displayName: finalUsername,
+      },
+      create: {
         id: data.user.id,
         email: data.user.email!,
         username: finalUsername,

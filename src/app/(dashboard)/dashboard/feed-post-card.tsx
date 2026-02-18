@@ -74,7 +74,7 @@ export function FeedPostCard({
             {post.user.displayName || post.user.username}
           </Link>
           <span className="text-white/50 text-sm ml-2">
-            {new Date(post.createdAt).toLocaleDateString()}
+            {new Date(post.createdAt).toLocaleDateString('en-US')}
           </span>
         </div>
       </div>

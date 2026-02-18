@@ -2,17 +2,30 @@ import { prisma } from "@/lib/db";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 
 export async function syncUser(user: SupabaseUser) {
-    // Check if user exists (double check)
-    const existing = await prisma.user.findUnique({
-        where: { id: user.id },
+    // Check if user exists by id or email
+    const existing = await prisma.user.findFirst({
+        where: {
+            OR: [
+                { id: user.id },
+                { email: user.email! },
+            ],
+        },
     });
 
-    if (existing) return existing;
+    if (existing) {
+        // Update the existing record to keep it in sync
+        return await prisma.user.update({
+            where: { id: existing.id },
+            data: {
+                email: user.email!,
+                displayName: user.user_metadata?.full_name || existing.displayName,
+                avatarUrl: user.user_metadata?.avatar_url || existing.avatarUrl,
+            },
+        });
+    }
 
     // Generate a username from email
-    // Fallback to "user" if email is missing (unlikely)
     const baseUsername = user.email?.split("@")[0] || "user";
-    // Keep only alphanumeric and underscores, lowercase
     const sanitizedBase = baseUsername.replace(/[^a-z0-9_]/gi, "").toLowerCase();
 
     let finalUsername = sanitizedBase || "user";
@@ -31,12 +44,18 @@ export async function syncUser(user: SupabaseUser) {
         suffix++;
     }
 
-    // Create user
+    // Create user with upsert to handle race conditions
     try {
-        return await prisma.user.create({
-            data: {
+        return await prisma.user.upsert({
+            where: { email: user.email! },
+            update: {
                 id: user.id,
-                email: user.email!, // Email is required in schema usually
+                displayName: user.user_metadata?.full_name || finalUsername,
+                avatarUrl: user.user_metadata?.avatar_url,
+            },
+            create: {
+                id: user.id,
+                email: user.email!,
                 username: finalUsername,
                 displayName: user.user_metadata?.full_name || finalUsername,
                 avatarUrl: user.user_metadata?.avatar_url,
@@ -44,9 +63,10 @@ export async function syncUser(user: SupabaseUser) {
         });
     } catch (error) {
         console.error("Error creating user in syncUser:", error);
-        // If creation fails (e.g. race condition), try fetching again
-        const retryExisting = await prisma.user.findUnique({
-            where: { id: user.id },
+        const retryExisting = await prisma.user.findFirst({
+            where: {
+                OR: [{ id: user.id }, { email: user.email! }],
+            },
         });
         if (retryExisting) return retryExisting;
 
