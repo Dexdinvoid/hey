@@ -12,11 +12,24 @@ type Notification = {
   createdAt: Date;
 };
 
+const typeConfig: Record<string, { icon: string; label: string; href: string }> = {
+  friend_request: { icon: "person_add", label: "Friend request", href: "/friends" },
+  like: { icon: "favorite", label: "Someone liked your post", href: "/dashboard" },
+  comment: { icon: "chat_bubble", label: "New comment on your post", href: "/dashboard" },
+  challenge: { icon: "emoji_events", label: "Challenge update", href: "/challenges" },
+  achievement: { icon: "military_tech", label: "Achievement unlocked!", href: "/dashboard" },
+  follow: { icon: "person_add", label: "New follower", href: "/dashboard" },
+};
+
 export function NotificationsList({
   notifications,
 }: {
   notifications: Notification[];
   currentUserId: string;
+  unreadCount?: number;
+  unreadByType?: Record<string, number>;
+  activeChallenges?: { id: string; title: string; progress: number }[];
+  topUsers?: { id: string; username: string; displayName: string | null; avatarUrl: string | null; points: number }[];
 }) {
   const router = useRouter();
 
@@ -32,62 +45,69 @@ export function NotificationsList({
 
   if (notifications.length === 0) {
     return (
-      <div className="glass rounded-2xl p-8 text-center border border-white/10">
-        <p className="text-white/60">No notifications yet.</p>
+      <div className="glass-card rounded-[2rem] p-10 text-center border-primary/20">
+        <span className="material-icons-round text-5xl text-primary/30 mb-4 block">
+          notifications_none
+        </span>
+        <p className="text-white/70 font-medium">No notifications yet.</p>
+        <p className="text-sm text-slate-500 mt-1">
+          When something happens, you&apos;ll see it here.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex justify-end">
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-3xl font-bold text-white tracking-tight">Notifications</h2>
         <button
           type="button"
           onClick={markAllRead}
-          className="text-sm text-purple-400 hover:text-purple-300"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full neon-gradient text-navy-deep font-bold text-sm neon-glow hover:-translate-y-0.5 transition-all"
         >
+          <span className="material-icons-round text-lg">done_all</span>
           Mark all read
         </button>
       </div>
-      <ul className="space-y-1">
+
+      {/* Notification Items */}
+      <ul className="space-y-3">
         {notifications.map((n) => {
           const unread = !n.readAt;
-          let label = "";
-          let href = "/dashboard";
-          try {
-            if (n.type === "friend_request") {
-              label = "Friend request";
-              href = "/friends";
-            } else if (n.type === "like") {
-              label = "Someone liked your post";
-              href = "/dashboard";
-            } else if (n.type === "comment") {
-              label = "New comment on your post";
-              href = "/dashboard";
-            } else {
-              label = n.type;
-            }
-          } catch {
-            label = n.type;
-          }
+          const config = typeConfig[n.type] || { icon: "circle_notifications", label: n.type, href: "/dashboard" };
+
           return (
             <li
               key={n.id}
-              className={`rounded-lg border px-4 py-3 ${
-                unread
-                  ? "bg-purple-500/10 border-purple-500/30"
-                  : "bg-white/5 border-white/10"
-              }`}
+              className={`glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/40 ${unread
+                  ? "border-primary/30 bg-primary/5"
+                  : "border-white/5"
+                }`}
             >
               <Link
-                href={href}
+                href={config.href}
                 onClick={() => unread && markRead(n.id)}
-                className="flex items-center justify-between"
+                className="flex items-center gap-4 px-6 py-4"
               >
-                <span className="text-white text-sm">{label}</span>
-                <span className="text-white/50 text-xs">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${unread
+                    ? "neon-gradient text-navy-deep neon-glow"
+                    : "bg-white/5 text-slate-500"
+                  }`}>
+                  <span className="material-icons-round text-xl">{config.icon}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className={`text-sm font-medium ${unread ? "text-white" : "text-slate-400"}`}>
+                    {config.label}
+                  </span>
+                </div>
+                <span className="text-xs text-slate-600 shrink-0">
                   {new Date(n.createdAt).toLocaleDateString()}
                 </span>
+                {unread && (
+                  <div className="w-2 h-2 rounded-full bg-primary neon-glow shrink-0" />
+                )}
               </Link>
             </li>
           );

@@ -21,7 +21,7 @@ export function Navbar({ user }: { user: User }) {
       <div className="container mx-auto px-4 flex items-center justify-between h-14 max-w-4xl">
         <Link
           href="/dashboard"
-          className="text-lg font-bold text-white hover:text-purple-300 transition-colors"
+          className="text-lg font-bold text-white hover:text-primary transition-colors"
         >
           Consistency
         </Link>
@@ -33,11 +33,10 @@ export function Navbar({ user }: { user: User }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive
                     ? "bg-white/10 text-white"
                     : "text-white/70 hover:text-white hover:bg-white/5"
-                }`}
+                  }`}
               >
                 {item.label}
               </Link>
@@ -66,7 +65,7 @@ export function Navbar({ user }: { user: User }) {
                 className="w-8 h-8 rounded-full border border-white/20"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white text-sm font-medium">
+              <div className="w-8 h-8 rounded-full neon-gradient flex items-center justify-center text-navy-deep text-sm font-bold">
                 {(user.displayName || user.username).slice(0, 1).toUpperCase()}
               </div>
             )}

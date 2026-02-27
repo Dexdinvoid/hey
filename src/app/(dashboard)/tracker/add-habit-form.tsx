@@ -25,7 +25,7 @@ export function AddHabitForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-white/90 mb-1">
+        <label htmlFor="name" className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">
           Habit name
         </label>
         <input
@@ -34,12 +34,12 @@ export function AddHabitForm() {
           type="text"
           required
           maxLength={100}
-          className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all text-sm"
           placeholder="e.g. Morning run"
         />
       </div>
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-white/90 mb-1">
+        <label htmlFor="description" className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">
           Description (optional)
         </label>
         <input
@@ -47,18 +47,18 @@ export function AddHabitForm() {
           name="description"
           type="text"
           maxLength={500}
-          className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all text-sm"
           placeholder="e.g. 5k before work"
         />
       </div>
       <div>
-        <label htmlFor="frequency" className="block text-sm font-medium text-white/90 mb-1">
+        <label htmlFor="frequency" className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">
           Frequency
         </label>
         <select
           id="frequency"
           name="frequency"
-          className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all text-sm"
         >
           <option value="daily">Daily</option>
           <option value="weekly">Weekly</option>
@@ -68,9 +68,10 @@ export function AddHabitForm() {
       <button
         type="submit"
         disabled={loading}
-        className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-medium"
+        className="flex items-center gap-2 px-6 py-3 rounded-2xl neon-gradient text-navy-deep font-bold text-sm neon-glow hover:-translate-y-0.5 transition-all disabled:opacity-50"
       >
-        {loading ? "Adding…" : "Add habit"}
+        <span className="material-icons-round text-lg">add_circle</span>
+        {loading ? "Adding…" : "Add Habit"}
       </button>
     </form>
   );

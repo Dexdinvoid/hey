@@ -12,15 +12,18 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        primary: "#135bec",
-        "primary-hover": "#0e4ac4",
+        primary: "#3B82F6",
+        "primary-light": "#60A5FA",
+        "primary-dark": "#2563EB",
+        "primary-hover": "#2563EB",
         "background-light": "#f6f6f8",
-        "background-dark": "#050510",
+        "background-dark": "#060B18",
+        "navy-deep": "#060B18",
         "glass-border": "rgba(255, 255, 255, 0.08)",
-        "glass-bg": "rgba(16, 22, 34, 0.6)",
+        "glass-bg": "rgba(16, 22, 40, 0.6)",
       },
       fontFamily: {
-        display: ["Space Grotesk", "sans-serif"],
+        display: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
       },
       borderRadius: {
         DEFAULT: "1rem",

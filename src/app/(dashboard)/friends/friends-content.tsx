@@ -68,72 +68,88 @@ export function FriendsContent({
     router.refresh();
   }
 
+  function UserAvatar({ user, size = "w-10 h-10" }: { user: { displayName: string | null; username: string; avatarUrl: string | null }; size?: string }) {
+    return user.avatarUrl ? (
+      <img
+        src={user.avatarUrl}
+        alt=""
+        className={`${size} rounded-full object-cover border border-primary/30`}
+      />
+    ) : (
+      <div className={`${size} rounded-full neon-gradient flex items-center justify-center text-navy-deep font-bold text-sm shrink-0`}>
+        {(user.displayName || user.username).slice(0, 1).toUpperCase()}
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
-      <section className="glass rounded-2xl p-6 border border-white/10">
-        <h2 className="text-lg font-medium text-white mb-4">Search users</h2>
-        <form onSubmit={handleSearch} className="flex gap-2 max-w-md">
+    <div className="space-y-8">
+      {/* Page Header */}
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-3xl font-bold text-white tracking-tight">Leaderboard</h2>
+      </div>
+
+      {/* Search Section */}
+      <section className="glass-card rounded-[2rem] p-7 border-primary/20">
+        <div className="flex items-center gap-3 mb-5">
+          <span className="material-icons-round text-primary text-xl">search</span>
+          <h3 className="text-lg font-bold text-white">Search Users</h3>
+        </div>
+        <form onSubmit={handleSearch} className="flex gap-3 max-w-md">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Username"
-            className="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="flex-1 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all text-sm"
           />
           <button
             type="submit"
             disabled={searching}
-            className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium disabled:opacity-50"
+            className="px-6 py-3 rounded-2xl neon-gradient text-navy-deep font-bold text-sm neon-glow hover:-translate-y-0.5 transition-all disabled:opacity-50"
           >
             {searching ? "…" : "Search"}
           </button>
         </form>
-        {error && <p className="text-sm text-red-400 mt-2">{error}</p>}
+        {error && <p className="text-sm text-red-400 mt-3">{error}</p>}
         {results.length > 0 && (
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-5 space-y-3">
             {results.map((u) => (
               <li
                 key={u.id}
-                className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2"
+                className="flex items-center justify-between rounded-2xl glass-panel px-4 py-3 border border-white/5 hover:border-primary/30 transition-all"
               >
                 <Link
                   href={`/profile/${u.username}`}
                   className="flex items-center gap-3"
                 >
-                  {u.avatarUrl ? (
-                    <img
-                      src={u.avatarUrl}
-                      alt=""
-                      className="w-8 h-8 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs">
-                      {(u.displayName || u.username).slice(0, 1).toUpperCase()}
-                    </div>
-                  )}
-                  <span className="text-white font-medium">
-                    {u.displayName || u.username}
-                  </span>
-                  {u.points != null && (
-                    <span className="text-white/50 text-sm">
-                      {u.points} pts · {u.league}
+                  <UserAvatar user={u} />
+                  <div>
+                    <span className="text-sm font-bold text-white hover:text-primary transition-colors">
+                      {u.displayName || u.username}
                     </span>
-                  )}
+                    {u.points != null && (
+                      <p className="text-xs text-slate-500">
+                        {u.points} pts · {u.league}
+                      </p>
+                    )}
+                  </div>
                 </Link>
                 <div>
                   {u.isFriend ? (
-                    <span className="text-white/50 text-sm">Friends</span>
+                    <span className="text-xs font-bold text-primary uppercase tracking-wider">Friends</span>
                   ) : u.pendingSent ? (
-                    <span className="text-white/50 text-sm">Request sent</span>
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Request sent</span>
                   ) : u.pendingRecv ? (
-                    <span className="text-white/50 text-sm">Pending</span>
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pending</span>
                   ) : (
                     <button
                       type="button"
                       onClick={() => handleSendRequest(u.username)}
-                      className="px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm"
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-full neon-gradient text-navy-deep font-bold text-xs neon-glow hover:-translate-y-0.5 transition-all"
                     >
-                      Add friend
+                      <span className="material-icons-round text-sm">person_add</span>
+                      Add
                     </button>
                   )}
                 </div>
@@ -143,35 +159,28 @@ export function FriendsContent({
         )}
       </section>
 
+      {/* Incoming Requests */}
       {incomingRequests.length > 0 && (
-        <section className="glass rounded-2xl p-6 border border-white/10">
-          <h2 className="text-lg font-medium text-white mb-4">
-            Friend requests
-          </h2>
+        <section className="glass-card rounded-[2rem] p-7 border-primary/20">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="material-icons-round text-primary text-xl">group_add</span>
+            <h3 className="text-lg font-bold text-white">Friend Requests</h3>
+            <span className="px-2.5 py-0.5 rounded-full bg-primary/20 text-primary text-xs font-bold">
+              {incomingRequests.length}
+            </span>
+          </div>
           <ul className="space-y-3">
             {incomingRequests.map(({ id, sender }) => (
               <li
                 key={id}
-                className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2"
+                className="flex items-center justify-between rounded-2xl glass-panel px-4 py-3 border border-white/5 hover:border-primary/30 transition-all"
               >
                 <Link
                   href={`/profile/${sender.username}`}
                   className="flex items-center gap-3"
                 >
-                  {sender.avatarUrl ? (
-                    <img
-                      src={sender.avatarUrl}
-                      alt=""
-                      className="w-8 h-8 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs">
-                      {(sender.displayName || sender.username)
-                        .slice(0, 1)
-                        .toUpperCase()}
-                    </div>
-                  )}
-                  <span className="text-white font-medium">
+                  <UserAvatar user={sender} />
+                  <span className="text-sm font-bold text-white">
                     {sender.displayName || sender.username}
                   </span>
                 </Link>
@@ -179,16 +188,17 @@ export function FriendsContent({
                   <button
                     type="button"
                     onClick={() => handleRespond(id, true)}
-                    className="px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full neon-gradient text-navy-deep font-bold text-xs neon-glow hover:-translate-y-0.5 transition-all"
                   >
+                    <span className="material-icons-round text-sm">check</span>
                     Accept
                   </button>
                   <button
                     type="button"
                     onClick={() => handleRespond(id, false)}
-                    className="px-3 py-1 rounded-lg bg-white/10 text-white/70 hover:bg-red-500/20 text-sm"
+                    className="px-4 py-2 rounded-full glass-panel text-slate-400 hover:text-red-400 hover:bg-red-500/10 text-xs font-bold border border-white/5 transition-all"
                   >
-                    Reject
+                    Decline
                   </button>
                 </div>
               </li>
@@ -197,47 +207,48 @@ export function FriendsContent({
         </section>
       )}
 
-      <section className="glass rounded-2xl p-6 border border-white/10">
-        <h2 className="text-lg font-medium text-white mb-4">Your friends</h2>
+      {/* Friends List */}
+      <section className="glass-card rounded-[2rem] p-7 border-primary/20">
+        <div className="flex items-center gap-3 mb-5">
+          <span className="material-icons-round text-primary text-xl">group</span>
+          <h3 className="text-lg font-bold text-white">Your Friends</h3>
+          <span className="px-2.5 py-0.5 rounded-full bg-white/5 text-slate-400 text-xs font-bold">
+            {friends.length}
+          </span>
+        </div>
         {friends.length === 0 ? (
-          <p className="text-white/60 text-sm">No friends yet. Search and add someone.</p>
+          <div className="text-center py-8">
+            <span className="material-icons-round text-4xl text-primary/20 mb-3 block">person_search</span>
+            <p className="text-slate-500 text-sm">No friends yet. Search and add someone above.</p>
+          </div>
         ) : (
           <ul className="space-y-3">
             {friends.map((u) => (
               <li
                 key={u.id}
-                className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2"
+                className="flex items-center justify-between rounded-2xl glass-panel px-4 py-3 border border-white/5 hover:border-primary/30 transition-all"
               >
                 <Link
                   href={`/profile/${u.username}`}
                   className="flex items-center gap-3"
                 >
-                  {u.avatarUrl ? (
-                    <img
-                      src={u.avatarUrl}
-                      alt=""
-                      className="w-8 h-8 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs">
-                      {(u.displayName || u.username)
-                        .slice(0, 1)
-                        .toUpperCase()}
-                    </div>
-                  )}
-                  <span className="text-white font-medium">
-                    {u.displayName || u.username}
-                  </span>
-                  {u.points != null && (
-                    <span className="text-white/50 text-sm">
-                      {u.points} pts · {u.league}
+                  <UserAvatar user={u} />
+                  <div>
+                    <span className="text-sm font-bold text-white">
+                      {u.displayName || u.username}
                     </span>
-                  )}
+                    {u.points != null && (
+                      <p className="text-xs text-slate-500">
+                        {u.points} pts · {u.league}
+                      </p>
+                    )}
+                  </div>
                 </Link>
                 <Link
                   href={`/messages/${u.username}`}
-                  className="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full glass-panel text-primary hover:bg-primary/10 hover:border-primary/30 text-xs font-bold border border-white/5 transition-all"
                 >
+                  <span className="material-icons-round text-sm">chat_bubble</span>
                   Message
                 </Link>
               </li>

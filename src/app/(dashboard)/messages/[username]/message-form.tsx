@@ -24,21 +24,21 @@ export function MessageForm({ otherUsername }: { otherUsername: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form onSubmit={handleSubmit} className="relative flex items-center gap-3">
       <input
         name="body"
         placeholder="Type a message..."
         maxLength={2000}
         required
-        className="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="flex-1 px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all text-sm"
       />
       <button
         type="submit"
-        className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium"
+        className="w-11 h-11 rounded-xl neon-gradient flex items-center justify-center text-navy-deep neon-glow hover:scale-105 transition-transform shrink-0"
       >
-        Send
+        <span className="material-icons-round text-xl">send</span>
       </button>
-      {error && <p className="text-sm text-red-400 w-full mt-1">{error}</p>}
+      {error && <p className="absolute -bottom-6 left-0 text-xs text-red-400">{error}</p>}
     </form>
   );
 }

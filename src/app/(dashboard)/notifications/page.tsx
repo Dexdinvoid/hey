@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import Link from "next/link";
 import { NotificationsList } from "./notifications-list";
 
 export default async function NotificationsPage() {
@@ -21,25 +20,55 @@ export default async function NotificationsPage() {
     where: { userId: authUser.id, readAt: null },
   });
 
+  // Count by type for sidebar badges
+  const unreadByType = {
+    all: unreadCount,
+    friend_request: 0,
+    like: 0,
+    comment: 0,
+    challenge: 0,
+    achievement: 0,
+    follow: 0,
+  };
+
+  const unreadNotifs = notifications.filter((n) => !n.readAt);
+  for (const n of unreadNotifs) {
+    const t = n.type as keyof typeof unreadByType;
+    if (t in unreadByType) unreadByType[t]++;
+  }
+
+  // Get active challenges for the right panel
+  const activeChallenges = await prisma.userChallenge.findMany({
+    where: { userId: authUser.id, status: "active" },
+    include: { challenge: true },
+    take: 3,
+  });
+
+  // Get top performers for right panel
+  const topUsers = await prisma.user.findMany({
+    orderBy: { points: "desc" },
+    take: 3,
+    select: {
+      id: true,
+      username: true,
+      displayName: true,
+      avatarUrl: true,
+      points: true,
+    },
+  });
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-white">
-          Notifications
-          {unreadCount > 0 && (
-            <span className="ml-2 text-sm font-normal text-white/60">
-              ({unreadCount} unread)
-            </span>
-          )}
-        </h1>
-        <Link
-          href="/dashboard"
-          className="text-sm text-white/60 hover:text-white"
-        >
-          Back to Home
-        </Link>
-      </div>
-      <NotificationsList notifications={notifications} currentUserId={authUser.id} />
-    </div>
+    <NotificationsList
+      notifications={notifications}
+      currentUserId={authUser.id}
+      unreadCount={unreadCount}
+      unreadByType={unreadByType}
+      activeChallenges={activeChallenges.map((uc) => ({
+        id: uc.id,
+        title: uc.challenge.title,
+        progress: uc.progress,
+      }))}
+      topUsers={topUsers}
+    />
   );
 }

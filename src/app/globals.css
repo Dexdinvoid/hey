@@ -3,20 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --background: #0f0f13;
+  --background: #060B18;
   --foreground: #e2e8f0;
-  --glass: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --accent: #a855f7;
-  --accent-hover: #9333ea;
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --accent: #3B82F6;
+  --accent-hover: #2563EB;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
+/* ── Glass Variants ── */
 .glass {
   background: var(--glass);
   backdrop-filter: blur(12px);
@@ -25,36 +26,81 @@ body {
 }
 
 .nav-glass {
-  background: rgba(15, 15, 19, 0.8);
+  background: rgba(10, 14, 28, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--glass-border);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-/* ── Login page custom styles ── */
 .glass-panel {
-  background: rgba(16, 22, 34, 0.4);
+  background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-nav {
+  background: rgba(6, 11, 24, 0.85);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border-right: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.glass-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.glass-sidebar {
+  background: rgba(6, 11, 24, 0.4);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-left: 1px solid rgba(59, 130, 246, 0.08);
 }
 
 .glass-card-floating {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px 0 rgba(19, 91, 236, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.12);
+}
+
+/* ── Neon / Accent Effects ── */
+.neon-gradient {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+}
+
+.neon-glow {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
+}
+
+.neon-glow-hover:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
 }
 
 .text-glow {
-  text-shadow: 0 0 20px rgba(19, 91, 236, 0.5);
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+/* ── Background Effects ── */
+.bg-swirl {
+  position: fixed;
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  background: linear-gradient(45deg, rgba(59, 130, 246, 0.08), transparent);
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-glow-point {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, transparent 75%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 .blob {
@@ -64,17 +110,31 @@ body {
   opacity: 0.6;
 }
 
-/* Input autofill fix for dark mode */
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 9999px;
+}
+
+/* ── Input autofill ── */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #101622 inset !important;
+  -webkit-box-shadow: 0 0 0 30px #060B18 inset !important;
   -webkit-text-fill-color: white !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Marquee ticker */
+/* ── Marquee ticker ── */
 @keyframes marquee {
   0% {
     transform: translateX(0);
@@ -87,4 +147,36 @@ input:-webkit-autofill:active {
 
 .login-ticker {
   animation: marquee 20s linear infinite;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

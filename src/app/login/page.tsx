@@ -21,15 +21,15 @@ export default async function LoginPage({
 
       {/* Background Ambience */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="blob w-[500px] h-[500px] rounded-full bg-primary/30 top-[-100px] left-[-100px] animate-pulse" />
-        <div className="blob w-[600px] h-[600px] rounded-full bg-purple-900/40 bottom-[-100px] right-[-100px]" />
-        <div className="blob w-[300px] h-[300px] rounded-full bg-primary/20 top-[40%] left-[40%] mix-blend-screen" />
+        <div className="blob w-[500px] h-[500px] rounded-full bg-blue-600/20 top-[-100px] left-[-100px] animate-pulse" />
+        <div className="blob w-[600px] h-[600px] rounded-full bg-blue-900/30 bottom-[-100px] right-[-100px]" />
+        <div className="blob w-[300px] h-[300px] rounded-full bg-primary/15 top-[40%] left-[40%] mix-blend-screen" />
       </div>
 
       {/* Navigation */}
       <nav className="relative z-50 w-full px-6 py-6 md:px-12 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/40">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center shadow-lg shadow-primary/40">
             {/* Bolt icon via SVG */}
             <svg className="w-4 h-4 text-white fill-current" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
@@ -68,7 +68,7 @@ export default async function LoginPage({
 
           <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight text-white">
             Habit tracking turned{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400 text-glow">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-300 text-glow">
               multiplayer
             </span>
             .
@@ -83,10 +83,10 @@ export default async function LoginPage({
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <div className="flex -space-x-3">
                 {/* Avatar placeholders — no external images to avoid hydration issues */}
-                <div className="w-10 h-10 rounded-full border-2 border-[#050510] bg-blue-500 flex items-center justify-center text-xs font-bold text-white">A</div>
-                <div className="w-10 h-10 rounded-full border-2 border-[#050510] bg-violet-500 flex items-center justify-center text-xs font-bold text-white">S</div>
-                <div className="w-10 h-10 rounded-full border-2 border-[#050510] bg-pink-500 flex items-center justify-center text-xs font-bold text-white">M</div>
-                <div className="w-10 h-10 rounded-full border-2 border-[#050510] bg-gray-800 flex items-center justify-center text-xs font-medium text-white">+2k</div>
+                <div className="w-10 h-10 rounded-full border-2 border-[#060B18] bg-blue-500 flex items-center justify-center text-xs font-bold text-white">A</div>
+                <div className="w-10 h-10 rounded-full border-2 border-[#060B18] bg-blue-600 flex items-center justify-center text-xs font-bold text-white">S</div>
+                <div className="w-10 h-10 rounded-full border-2 border-[#060B18] bg-blue-400 flex items-center justify-center text-xs font-bold text-white">M</div>
+                <div className="w-10 h-10 rounded-full border-2 border-[#060B18] bg-gray-800 flex items-center justify-center text-xs font-medium text-white">+2k</div>
               </div>
               <p>challengers active today</p>
             </div>
@@ -152,8 +152,8 @@ export default async function LoginPage({
       {/* Footer Ticker */}
       <footer className="w-full border-t border-white/5 bg-[#050510]/50 backdrop-blur-md relative z-20 overflow-hidden">
         <div className="flex items-center py-4 relative">
-          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#050510] to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#050510] to-transparent z-10" />
+          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#060B18] to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#060B18] to-transparent z-10" />
           <div className="flex gap-12 login-ticker whitespace-nowrap px-4">
             <TickerItem color="bg-green-500" text="alex_j just completed" highlight="Morning Meditation" />
             <TickerItem color="bg-primary" text="sarah_99 leveled up to" highlight="Gold Tier" />

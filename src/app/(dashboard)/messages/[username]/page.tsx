@@ -31,12 +31,15 @@ export default async function MessagePage({
   });
   if (!friendship) {
     return (
-      <div className="glass rounded-2xl p-6 border border-white/10">
-        <p className="text-white/70">
+      <div className="glass-card rounded-[2rem] p-8 border-primary/20 text-center">
+        <span className="material-icons-round text-5xl text-primary/30 mb-4 block">
+          person_off
+        </span>
+        <p className="text-white/70 font-medium">
           You can only message friends. Add{" "}
           <Link
             href={`/profile/${other.username}`}
-            className="text-purple-400 hover:underline"
+            className="text-primary hover:underline font-bold"
           >
             {other.displayName || other.username}
           </Link>{" "}
@@ -44,8 +47,9 @@ export default async function MessagePage({
         </p>
         <Link
           href="/friends"
-          className="inline-block mt-4 text-purple-400 hover:underline text-sm"
+          className="inline-flex items-center gap-2 mt-5 px-6 py-3 rounded-full neon-gradient text-navy-deep font-bold text-sm neon-glow hover:-translate-y-0.5 transition-all"
         >
+          <span className="material-icons-round text-lg">group</span>
           Go to Friends
         </Link>
       </div>
@@ -74,25 +78,31 @@ export default async function MessagePage({
   const messages = conversation?.messages ?? [];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      {/* Page Header */}
       <div className="flex items-center gap-4">
         <Link
           href="/friends"
-          className="text-sm text-white/60 hover:text-white"
+          className="flex items-center gap-1 text-sm text-slate-400 hover:text-primary transition-colors"
         >
-          ← Friends
+          <span className="material-icons-round text-base">arrow_back</span>
+          Friends
         </Link>
-        <h1 className="text-xl font-semibold text-white">
+        <h2 className="text-2xl font-bold text-white">
           Message {other.displayName || other.username}
-        </h1>
+        </h2>
       </div>
 
-      <div className="glass rounded-2xl border border-white/10 flex flex-col min-h-[400px]">
-        <div className="flex-1 p-4 space-y-3 overflow-y-auto">
+      {/* Chat Container */}
+      <div className="glass-card rounded-[2rem] border-primary/20 flex flex-col min-h-[400px] overflow-hidden">
+        <div className="flex-1 p-6 space-y-4 overflow-y-auto scrollbar-hide">
           {messages.length === 0 ? (
-            <p className="text-white/50 text-sm text-center py-8">
-              No messages yet. Say hi!
-            </p>
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <span className="material-icons-round text-5xl text-primary/20 mb-3">chat_bubble_outline</span>
+              <p className="text-slate-500 text-sm">
+                No messages yet. Say hi! 👋
+              </p>
+            </div>
           ) : (
             messages.map((m) => (
               <div
@@ -100,14 +110,13 @@ export default async function MessagePage({
                 className={`flex ${m.senderId === authUser.id ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-lg px-3 py-2 ${
-                    m.senderId === authUser.id
-                      ? "bg-purple-600 text-white"
-                      : "bg-white/10 text-white"
-                  }`}
+                  className={`max-w-[80%] rounded-2xl px-4 py-3 ${m.senderId === authUser.id
+                      ? "neon-gradient text-navy-deep"
+                      : "glass-panel text-white border border-white/5"
+                    }`}
                 >
                   <p className="text-sm">{m.body}</p>
-                  <p className="text-xs opacity-70 mt-1">
+                  <p className={`text-[10px] mt-1.5 ${m.senderId === authUser.id ? "text-navy-deep/60" : "text-slate-600"}`}>
                     {new Date(m.createdAt).toLocaleString()}
                   </p>
                 </div>
@@ -115,7 +124,7 @@ export default async function MessagePage({
             ))
           )}
         </div>
-        <div className="p-4 border-t border-white/10">
+        <div className="p-5 border-t border-white/5">
           <MessageForm otherUsername={other.username} />
         </div>
       </div>

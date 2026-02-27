@@ -33,29 +33,43 @@ export default async function TrackerPage() {
 
   return (
     <div className="space-y-8">
+      {/* Page Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-white">Habit Tracker</h1>
+        <h2 className="text-3xl font-bold text-white tracking-tight">Habit Tracker</h2>
         <Link
           href="/dashboard"
-          className="text-sm text-white/60 hover:text-white"
+          className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-primary transition-colors"
         >
+          <span className="material-icons-round text-base">arrow_back</span>
           Back to Home
         </Link>
       </div>
 
+      {/* Activity Charts */}
       <section className="space-y-6">
-        <h2 className="text-lg font-medium text-white">Activity</h2>
+        <div className="flex items-center gap-3">
+          <span className="material-icons-round text-primary text-xl">insights</span>
+          <h3 className="text-lg font-bold text-white">Activity</h3>
+        </div>
         <EnhancedLineChart completions={allCompletions} />
         <EnhancedHeatmap completions={allCompletions} />
       </section>
 
-      <section className="glass rounded-2xl p-6 border border-white/10">
-        <h2 className="text-lg font-medium text-white mb-4">Add habit</h2>
+      {/* Add Habit */}
+      <section className="glass-card rounded-[2rem] p-7 border-primary/20">
+        <div className="flex items-center gap-3 mb-5">
+          <span className="material-icons-round text-primary text-xl">add_circle</span>
+          <h3 className="text-lg font-bold text-white">Add Habit</h3>
+        </div>
         <AddHabitForm />
       </section>
 
-      <section className="glass rounded-2xl p-6 border border-white/10">
-        <h2 className="text-lg font-medium text-white mb-4">Your habits</h2>
+      {/* Habit List */}
+      <section className="glass-card rounded-[2rem] p-7 border-primary/20">
+        <div className="flex items-center gap-3 mb-5">
+          <span className="material-icons-round text-primary text-xl">checklist</span>
+          <h3 className="text-lg font-bold text-white">Your Habits</h3>
+        </div>
         <HabitList habits={habits} />
       </section>
     </div>
